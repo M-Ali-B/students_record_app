@@ -11,6 +11,18 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
+  {
+    path: 'student-create',
+    loadChildren: () => import('./student-create/student-create.module').then( m => m.StudentCreatePageModule)
+  },
+  {
+    path: 'student-update',
+    loadChildren: () => import('./student-update/student-update.module').then( m => m.StudentUpdatePageModule)
+  },
+  {
+    path: 'student-delete',
+    loadChildren: () => import('./student-delete/student-delete.module').then( m => m.StudentDeletePageModule)
+  },
 ];
 
 @NgModule({

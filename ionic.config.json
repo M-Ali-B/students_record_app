@@ -1,5 +1,7 @@
 {
   "name": "students_record_app",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
