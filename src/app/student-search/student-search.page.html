@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>student search</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-select placeholder="Select fruit" (ionChange)="handleChange($event)">
+        <ion-item *ngFor="let d of data">
+          <ion-select-option value="{{d}}">{{d}}</ion-select-option>
+        </ion-item>
+
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+
+  <ion-item *ngFor="let user of db.USERS">
+    <ion-label>
+      <h2><strong>{{ user.name }}</strong></h2>
+      <p>{{ user.fname }}</p>
+      <p>{{ user.class }}</p>
+      <p>{{user.phone}}</p>
+    </ion-label>
+
+    <div class="item-note" item-end>
+      <ion-icon color="primary" name="create" style="zoom:1.3" [routerLink]="['/student-edit/', user.user_id]">
+      </ion-icon>
+
+      <ion-icon color="danger" name="trash" style="zoom:1.3" (click)="remove(user.user_id)"></ion-icon>
+    </div>
+  </ion-item>
+</ion-content>

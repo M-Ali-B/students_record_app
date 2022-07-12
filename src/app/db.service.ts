@@ -80,6 +80,24 @@ export class DbService {
     });
   }
 
+  getAllUsersByClass(classNumber) {
+    return this.dbInstance.executeSql(`SELECT * FROM ${this.db_table} WHERE class = ?`, [classNumber])
+      .then((res) => {
+        this.USERS = [];
+        if (res.rows.length > 0) {
+          for (var i = 0; i < res.rows.length; i++) {
+            this.USERS.push(res.rows.item(i));
+          }
+          console.log(this.USERS);
+          return this.USERS;
+        }
+      }, (e) => {
+        console.log(e);
+        alert(JSON.stringify(e));
+      });
+
+  }
+
   // Get user
   getUser(id): Promise<any> {
     return this.dbInstance.executeSql(`SELECT * FROM ${this.db_table} WHERE user_id = ?`, [id])
@@ -113,4 +131,7 @@ export class DbService {
       });
   }
 
+  reset() {
+    this.USERS = [];
+  }
 }
