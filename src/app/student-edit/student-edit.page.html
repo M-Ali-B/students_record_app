@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Edit</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-input [(ngModel)]="studName" placeholder="Name"></ion-input>
+  <ion-input [(ngModel)]="fName" placeholder="Father Name"></ion-input>
+  <ion-input [(ngModel)]="classNumber" placeholder="Class"></ion-input>
+  <ion-input [(ngModel)]="phone" placeholder="Phone"></ion-input>
+
+  <ion-button color="dark" expand="block" (click)="onUpdate()">
+    Update
+  </ion-button>
+</ion-content>

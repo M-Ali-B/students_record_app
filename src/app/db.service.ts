@@ -31,11 +31,10 @@ export class DbService {
         sqLite.executeSql(`
                   CREATE TABLE IF NOT EXISTS ${this.db_table} (
                     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    roll_number INTEGER,
                     name varchar(255),
                     fname varchar(255),
-                    class INTEGER,
-                    phone INTEGER
+                    class varchar(255),
+                    phone varchar(255)
                   )`, [])
           .then((res) => {
             // alert(JSON.stringify(res));
@@ -54,12 +53,13 @@ export class DbService {
     //   return;
     // }
     this.dbInstance.executeSql(`
-      INSERT INTO ${this.db_table} (studName, fName, classNumber, phone) VALUES
+      INSERT INTO ${this.db_table} (name, fName, class, phone) VALUES
       ('${studName}', '${fName}', '${classNumber}','${phone}')`, [])
       .then(() => {
         alert("Success");
         this.getAllUsers();
       }, (e) => {
+        console.log(e);
         alert(JSON.stringify(e.err));
       });
   }
@@ -71,9 +71,11 @@ export class DbService {
         for (var i = 0; i < res.rows.length; i++) {
           this.USERS.push(res.rows.item(i));
         }
+        console.log(this.USERS);
         return this.USERS;
       }
     }, (e) => {
+      console.log(e);
       alert(JSON.stringify(e));
     });
   }
@@ -85,15 +87,17 @@ export class DbService {
         return {
           user_id: res.rows.item(0).user_id,
           name: res.rows.item(0).name,
-          email: res.rows.item(0).email
+          fname: res.rows.item(0).fname,
+          class: res.rows.item(0).class,
+          phone: res.rows.item(0).phone
         }
       });
   }
 
   // Update
-  updateUser(id, name, email) {
-    let data = [name, email];
-    return this.dbInstance.executeSql(`UPDATE ${this.db_table} SET name = ?, email = ? WHERE user_id = ${id}`, data)
+  updateUser(id, studName, fname, classNumber, phone) {
+    let data = [studName, fname, classNumber, phone];
+    return this.dbInstance.executeSql(`UPDATE ${this.db_table} SET name = ?, fname = ? , class = ?, phone = ? WHERE user_id = ${id}`, data)
   }
 
   // Delete

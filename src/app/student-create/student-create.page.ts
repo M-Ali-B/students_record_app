@@ -8,10 +8,10 @@ import { DbService } from '../db.service';
 })
 export class StudentCreatePage implements OnInit {
 
-  studName: String = "";
-  fName: String = "";
-  classNumber: Number = 0;
-  phone: Number = 0;
+  studName: string = "";
+  fName: string = "";
+  classNumber: string = "";
+  phone: string = "";
   constructor(
     private db: DbService
   ) {
@@ -27,6 +27,10 @@ export class StudentCreatePage implements OnInit {
 
   createUser() {
     this.db.addItem(this.studName, this.fName, this.classNumber, this.phone)
+  }
+
+  remove(id) {
+    this.db.deleteUser(id);
   }
 
 }
