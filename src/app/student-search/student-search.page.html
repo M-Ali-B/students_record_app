@@ -1,5 +1,8 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
     <ion-title>student search</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -7,7 +10,7 @@
 <ion-content>
   <ion-list>
     <ion-item>
-      <ion-select placeholder="Select fruit" (ionChange)="handleChange($event)">
+      <ion-select placeholder="Select Class " (ionChange)="handleChange($event)">
         <ion-item *ngFor="let d of data">
           <ion-select-option value="{{d}}">{{d}}</ion-select-option>
         </ion-item>

@@ -11,6 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
 import { SMS } from '@awesome-cordova-plugins/sms/ngx';
+import { SQLitePorter } from '@awesome-cordova-plugins/sqlite-porter/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -19,6 +20,7 @@ import { SMS } from '@awesome-cordova-plugins/sms/ngx';
   providers: [
     SQLite,
     SMS,
+    SQLitePorter,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent],

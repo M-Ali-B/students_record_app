@@ -2,40 +2,43 @@ import { Injectable } from '@angular/core';
 import { SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
 import { Platform } from '@ionic/angular';
-
+import { SQLitePorter } from '@awesome-cordova-plugins/sqlite-porter/ngx';
 @Injectable({
   providedIn: 'root'
 })
 export class DbService {
 
   private dbInstance: SQLiteObject;
+  private sqlStatement: any;
   readonly db_name: string = "student_record.db";
   readonly db_table: string = "studentTable";
   USERS: Array<any>;
 
   constructor(
     private platform: Platform,
-    private sqlite: SQLite
+    private sqlite: SQLite,
+    private sqlitePorter: SQLitePorter
   ) {
     this.databaseConn();
   }
 
   // Create SQLite database
   databaseConn() {
-    this.platform.ready().then(() => {
-      this.sqlite.create({
-        name: this.db_name,
-        location: 'default'
-      }).then((sqLite: SQLiteObject) => {
-        this.dbInstance = sqLite;
-        sqLite.executeSql(`
+    this.sqlStatement = `
                   CREATE TABLE IF NOT EXISTS ${this.db_table} (
                     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name varchar(255),
                     fname varchar(255),
                     class varchar(255),
                     phone varchar(255)
-                  )`, [])
+                  )`;
+    this.platform.ready().then(() => {
+      this.sqlite.create({
+        name: this.db_name,
+        location: 'default'
+      }).then((sqLite: SQLiteObject) => {
+        this.dbInstance = sqLite;
+        sqLite.executeSql(this.sqlStatement, [])
           .then((res) => {
             // alert(JSON.stringify(res));
           })
@@ -133,5 +136,31 @@ export class DbService {
 
   reset() {
     this.USERS = [];
+  }
+
+  exportData() {
+    // var dbShell = window.openDatabase(database_name, database_version, database_displayname, database_size);
+    var dbShell = window['openDatabase'](this.db_name, '1', this.db_name, 1000000);
+
+    this.sqlitePorter.exportDbToSql(dbShell)
+      .then((data) => console.log('exported', data))
+      .catch(e => console.error(e));
+  }
+
+  importData() {
+
+    // var dbShell = window.openDatabase(database_name, database_version, database_displayname, database_size);
+    var dbShell = window['openDatabase'](this.db_name, '1', this.db_name, 1000000);
+    this.sqlitePorter.importSqlToDb(dbShell, this.sqlStatement)
+      .then(() => console.log('Imported'))
+      .catch(e => console.error(e));
+  }
+
+  writeFile() {
+
+  }
+
+  readFile() {
+
   }
 }

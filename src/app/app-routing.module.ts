@@ -35,6 +35,10 @@ const routes: Routes = [
     path: 'message-students',
     loadChildren: () => import('./message-students/message-students.module').then( m => m.MessageStudentsPageModule)
   },
+  {
+    path: 'import-export-data',
+    loadChildren: () => import('./import-export-data/import-export-data.module').then( m => m.ImportExportDataPageModule)
+  },
 ];
 
 @NgModule({
