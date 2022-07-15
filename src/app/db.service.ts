@@ -3,6 +3,9 @@ import { SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
 import { Platform } from '@ionic/angular';
 import { SQLitePorter } from '@awesome-cordova-plugins/sqlite-porter/ngx';
+// import { writeFile } from 'fs';
+import { File } from '@awesome-cordova-plugins/file/ngx';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,7 +20,8 @@ export class DbService {
   constructor(
     private platform: Platform,
     private sqlite: SQLite,
-    private sqlitePorter: SQLitePorter
+    private sqlitePorter: SQLitePorter,
+    private file: File
   ) {
     this.databaseConn();
   }
@@ -139,11 +143,16 @@ export class DbService {
   }
 
   exportData() {
+    // this.databaseConn();
+    this.importData();
     // var dbShell = window.openDatabase(database_name, database_version, database_displayname, database_size);
     var dbShell = window['openDatabase'](this.db_name, '1', this.db_name, 1000000);
 
     this.sqlitePorter.exportDbToSql(dbShell)
-      .then((data) => console.log('exported', data))
+      .then((data) => {
+        console.log('exported', data)
+        this.createFile(data);
+      })
       .catch(e => console.error(e));
   }
 
@@ -156,11 +165,74 @@ export class DbService {
       .catch(e => console.error(e));
   }
 
-  writeFile() {
+  createFile(data) {
+    document.addEventListener("deviceready", function () {
 
+
+      window['requestFileSystem'](window['PERSISTENT'], 10000, function (fs) {
+
+        console.log('file system open: ' + fs.name);
+        fs.root.getFile("newPersistentFile.txt", { create: true, exclusive: false }, function (fileEntry) {
+
+          console.log("fileEntry is file?" + fileEntry.isFile.toString());
+          // fileEntry.name == 'someFile.txt';
+          // fileEntry.fullPath == 'ms-appdata:///newPersistentFile.txt';
+          writeToFile(fileEntry, data);
+          // writeFile(fileEntry.fullPath, data, err => { console.log('writefile', err) });
+        }, (err) => { console.log('onErrorCreateFile', err) }
+        );
+
+      }, (err) => { console.log('onErrorLoadFs', err) });
+    }, false);
   }
 
   readFile() {
 
   }
+
+}
+function writeToFile(fileEntry, dataObj) {
+  // Create a FileWriter object for our FileEntry (log.txt).
+  fileEntry.createWriter(function (fileWriter) {
+
+    fileWriter.onwriteend = function () {
+      console.log("Successful file write...");
+      readFile(fileEntry);
+    };
+
+    fileWriter.onerror = function (e) {
+      console.log("Failed file write: " + e.toString());
+    };
+
+    // If data object is not passed in,
+    // create a new Blob instead.
+    if (!dataObj) {
+      dataObj = new Blob([dataObj], { type: 'text/plain' });
+    }
+
+    fileWriter.write(dataObj);
+  });
+}
+
+function readFile(fileEntry) {
+
+  fileEntry.file(function (file) {
+    var reader = new FileReader();
+
+    reader.onloadend = function () {
+      console.log("Successful file read: " + this.result);
+      displayFileData(fileEntry.fullPath + ": " + this.result);
+    };
+
+    reader.readAsText(file);
+
+  }, (err) => {
+    console.log('onErrorReadFile', err)
+  }
+  )
+}
+
+function displayFileData(fileEntry) {
+  alert(fileEntry);
+  console.log(fileEntry);
 }
