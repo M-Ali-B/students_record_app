@@ -18,4 +18,8 @@ export class ImportExportDataPage implements OnInit {
   exportData() {
     this.db.exportData();
   }
+
+  openFile() {
+    this.db.openFile();
+  }
 }

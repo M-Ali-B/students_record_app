@@ -6,6 +6,7 @@ import { SQLitePorter } from '@awesome-cordova-plugins/sqlite-porter/ngx';
 // import { writeFile } from 'fs';
 import { File } from '@awesome-cordova-plugins/file/ngx';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
+import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,8 @@ export class DbService {
     private sqlite: SQLite,
     private sqlitePorter: SQLitePorter,
     private file: File,
-    private transfer: FileTransfer
+    private transfer: FileTransfer,
+    private fileOpener: FileOpener
   ) {
     this.databaseConn();
   }
@@ -156,6 +158,7 @@ export class DbService {
         console.log('exported', data)
         this.createFile(data);
         // this.downloadFileFromData();       will see later lets try opening the cdvfile://localhost/persistent/  to see the file
+        // this.openFile();
       })
       .catch(e => console.error(e));
   }
@@ -175,7 +178,7 @@ export class DbService {
 
       window['requestFileSystem'](window['PERSISTENT'], 10000, function (fs) {
 
-        console.log('file system open: ' + fs.name);
+        console.log(fs);
         fs.root.getFile("newPersistentFile.txt", { create: true, exclusive: false }, function (fileEntry) {
 
           console.log("fileEntry is file?" + fileEntry.isFile.toString()); console.log(fileEntry.fullPath)
@@ -224,6 +227,12 @@ export class DbService {
       }, (err) => { console.log('onErrorLoadFs', err) });
     }, false);
 
+  }
+
+  openFile() {
+    this.fileOpener.showOpenWithDialog('newPersistentFile.txt', 'text/plain')
+      .then(() => console.log('File is opened'))
+      .catch(e => console.log('Error opening file', e));
   }
 
 }
