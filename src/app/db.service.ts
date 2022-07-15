@@ -5,6 +5,7 @@ import { Platform } from '@ionic/angular';
 import { SQLitePorter } from '@awesome-cordova-plugins/sqlite-porter/ngx';
 // import { writeFile } from 'fs';
 import { File } from '@awesome-cordova-plugins/file/ngx';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +17,14 @@ export class DbService {
   readonly db_name: string = "student_record.db";
   readonly db_table: string = "studentTable";
   USERS: Array<any>;
+  private fileDataEntry: string = '';
 
   constructor(
     private platform: Platform,
     private sqlite: SQLite,
     private sqlitePorter: SQLitePorter,
-    private file: File
+    private file: File,
+    private transfer: FileTransfer
   ) {
     this.databaseConn();
   }
@@ -152,6 +155,7 @@ export class DbService {
       .then((data) => {
         console.log('exported', data)
         this.createFile(data);
+        // this.downloadFileFromData();       will see later lets try opening the cdvfile://localhost/persistent/  to see the file
       })
       .catch(e => console.error(e));
   }
@@ -174,24 +178,57 @@ export class DbService {
         console.log('file system open: ' + fs.name);
         fs.root.getFile("newPersistentFile.txt", { create: true, exclusive: false }, function (fileEntry) {
 
-          console.log("fileEntry is file?" + fileEntry.isFile.toString());
-          // fileEntry.name == 'someFile.txt';
-          // fileEntry.fullPath == 'ms-appdata:///newPersistentFile.txt';
+          console.log("fileEntry is file?" + fileEntry.isFile.toString()); console.log(fileEntry.fullPath)
           writeToFile(fileEntry, data);
-          // writeFile(fileEntry.fullPath, data, err => { console.log('writefile', err) });
         }, (err) => { console.log('onErrorCreateFile', err) }
         );
 
       }, (err) => { console.log('onErrorLoadFs', err) });
     }, false);
   }
+  downloadFileFromData() {
+    const fileTransfer: FileTransferObject = this.transfer.create();
+    // let path = 'file:///android_asset/www/';
+    let path = 'cdvfile://localhost/persistent/';
+    // let path = 'F:/'
+    // let dir_name = 'Download'; // directory to download - you can also create new directory
+    // let file_name = 'file.txt'; //any file name you like
 
-  readFile() {
+
+    // let result = this.file.createDir(path + file_name, dir_name, true);
+    document.addEventListener("deviceready", function () {
+
+
+      window['requestFileSystem'](window['PERSISTENT'], 10000, function (fs) {
+
+        console.log('file system open: ' + fs.name);
+        fs.root.getFile("newPersistentFile.txt", { create: false, exclusive: false }, function (fileEntry) {
+
+          console.log("fileEntry is file?" + fileEntry.isFile.toString());
+
+
+          // result.then((resp) => {
+          // path = resp.toURL();
+          // console.log(path);
+          fileTransfer.download(path, fileEntry.name, true).then((entry) => {
+            console.log('download complete: ' + entry.toURL());
+          }, (error) => {
+            console.log(error)
+          });
+          // }, (err) => {
+          //   console.log('error on creating path : ' + err);
+          // });
+        }, (err) => { console.log('onErrorCreateFile', err) }
+        );
+
+      }, (err) => { console.log('onErrorLoadFs', err) });
+    }, false);
 
   }
 
 }
 function writeToFile(fileEntry, dataObj) {
+  console.log(fileEntry);
   // Create a FileWriter object for our FileEntry (log.txt).
   fileEntry.createWriter(function (fileWriter) {
 
@@ -212,6 +249,7 @@ function writeToFile(fileEntry, dataObj) {
 
     fileWriter.write(dataObj);
   });
+  // downloadFileFromData(fileEntry);
 }
 
 function readFile(fileEntry) {
@@ -236,3 +274,5 @@ function displayFileData(fileEntry) {
   alert(fileEntry);
   console.log(fileEntry);
 }
+
+
