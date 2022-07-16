@@ -5,9 +5,9 @@ import { Platform } from '@ionic/angular';
 import { SQLitePorter } from '@awesome-cordova-plugins/sqlite-porter/ngx';
 // import { writeFile } from 'fs';
 import { File } from '@awesome-cordova-plugins/file/ngx';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
+// import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
-
+declare let cordova: any;
 @Injectable({
   providedIn: 'root'
 })
@@ -25,7 +25,7 @@ export class DbService {
     private sqlite: SQLite,
     private sqlitePorter: SQLitePorter,
     private file: File,
-    private transfer: FileTransfer,
+
     private fileOpener: FileOpener
   ) {
     this.databaseConn();
@@ -172,71 +172,43 @@ export class DbService {
       .catch(e => console.error(e));
   }
 
+  // createFile(data) {      with REQUESTFILESYSTEM
+  //   document.addEventListener("deviceready", function () {
+
+
+  //     window['requestFileSystem'](window['PERSISTENT'], 10000, function (fs) {
+
+  //       console.log(fs);
+  //       fs.root.getFile("newPersistentFile.txt", { create: true, exclusive: false }, function (fileEntry) {
+
+  //         console.log("fileEntry is file?" + fileEntry.isFile.toString()); console.log(fileEntry.fullPath)
+  //         writeToFile(fileEntry, data);
+  //       }, (err) => { console.log('onErrorCreateFile', err) }
+  //       );
+
+  //     }, (err) => { console.log('onErrorLoadFs', err) });
+  //   }, false);
+  // }
+
   createFile(data) {
     document.addEventListener("deviceready", function () {
+      window['resolveLocalFileSystemURL'](cordova.file.externalDataDirectory, function (dirEntry) {
+        console.log('file system open: ' + dirEntry.name);
+        var isAppend = true;
+        createMyFile(dirEntry, data, "fileToAppend.txt", isAppend);
+      }, (error) => { console.log('onErrorLoadFs', error) });
 
-
-      window['requestFileSystem'](window['PERSISTENT'], 10000, function (fs) {
-
-        console.log(fs);
-        fs.root.getFile("newPersistentFile.txt", { create: true, exclusive: false }, function (fileEntry) {
-
-          console.log("fileEntry is file?" + fileEntry.isFile.toString()); console.log(fileEntry.fullPath)
-          writeToFile(fileEntry, data);
-        }, (err) => { console.log('onErrorCreateFile', err) }
-        );
-
-      }, (err) => { console.log('onErrorLoadFs', err) });
     }, false);
-  }
-  downloadFileFromData() {
-    const fileTransfer: FileTransferObject = this.transfer.create();
-    // let path = 'file:///android_asset/www/';
-    let path = 'cdvfile://localhost/persistent/';
-    // let path = 'F:/'
-    // let dir_name = 'Download'; // directory to download - you can also create new directory
-    // let file_name = 'file.txt'; //any file name you like
-
-
-    // let result = this.file.createDir(path + file_name, dir_name, true);
-    document.addEventListener("deviceready", function () {
-
-
-      window['requestFileSystem'](window['PERSISTENT'], 10000, function (fs) {
-
-        console.log('file system open: ' + fs.name);
-        fs.root.getFile("newPersistentFile.txt", { create: false, exclusive: false }, function (fileEntry) {
-
-          console.log("fileEntry is file?" + fileEntry.isFile.toString());
-
-
-          // result.then((resp) => {
-          // path = resp.toURL();
-          // console.log(path);
-          fileTransfer.download(path, fileEntry.name, true).then((entry) => {
-            console.log('download complete: ' + entry.toURL());
-          }, (error) => {
-            console.log(error)
-          });
-          // }, (err) => {
-          //   console.log('error on creating path : ' + err);
-          // });
-        }, (err) => { console.log('onErrorCreateFile', err) }
-        );
-
-      }, (err) => { console.log('onErrorLoadFs', err) });
-    }, false);
-
   }
 
   openFile() {
-    this.fileOpener.showOpenWithDialog('newPersistentFile.txt', 'text/plain')
+    this.fileOpener.showOpenWithDialog(cordova.file.externalDataDirectory + 'fileToAppend.txt', 'text/plain')
       .then(() => console.log('File is opened'))
       .catch(e => console.log('Error opening file', e));
   }
 
 }
-function writeToFile(fileEntry, dataObj) {
+function writeToFile(fileEntry, dataObj, file_name, isAppend) {
   console.log(fileEntry);
   // Create a FileWriter object for our FileEntry (log.txt).
   fileEntry.createWriter(function (fileWriter) {
@@ -252,10 +224,18 @@ function writeToFile(fileEntry, dataObj) {
 
     // If data object is not passed in,
     // create a new Blob instead.
-    if (!dataObj) {
-      dataObj = new Blob([dataObj], { type: 'text/plain' });
+    // if (!dataObj) {
+    //   dataObj = new Blob([dataObj], { type: 'text/plain' });
+    // }
+    // If we are appending data to file, go to the end of the file.
+    if (isAppend) {
+      try {
+        fileWriter.seek(fileWriter.length);
+      }
+      catch (e) {
+        console.log("file doesn't exist!");
+      }
     }
-
     fileWriter.write(dataObj);
   });
   // downloadFileFromData(fileEntry);
@@ -284,4 +264,52 @@ function displayFileData(fileEntry) {
   console.log(fileEntry);
 }
 
+function createMyFile(dirEntry, data, fileName, isAppend) {
+  // Creates a new file or returns the file if it already exists.
+  dirEntry.getFile(fileName, { create: true, exclusive: false }, function (fileEntry) {
 
+    writeToFile(fileEntry, data, null, isAppend);
+
+  }, (error) => { console.log('onErrorCreateFile', error) });
+
+}
+
+// function downloadFileFromData() {
+//   const fileTransfer: FileTransferObject = this.transfer.create();
+//   // let path = 'file:///android_asset/www/';
+//   let path = 'cdvfile://localhost/persistent/';
+//   // let path = 'F:/'
+//   // let dir_name = 'Download'; // directory to download - you can also create new directory
+//   // let file_name = 'file.txt'; //any file name you like
+
+
+//   // let result = this.file.createDir(path + file_name, dir_name, true);
+//   document.addEventListener("deviceready", function () {
+
+
+//     window['requestFileSystem'](window['PERSISTENT'], 10000, function (fs) {
+
+//       console.log('file system open: ' + fs.name);
+//       fs.root.getFile("newPersistentFile.txt", { create: false, exclusive: false }, function (fileEntry) {
+
+//         console.log("fileEntry is file?" + fileEntry.isFile.toString());
+
+
+//         // result.then((resp) => {
+//         // path = resp.toURL();
+//         // console.log(path);
+//         fileTransfer.download(path, fileEntry.name, true).then((entry) => {
+//           console.log('download complete: ' + entry.toURL());
+//         }, (error) => {
+//           console.log(error)
+//         });
+//         // }, (err) => {
+//         //   console.log('error on creating path : ' + err);
+//         // });
+//       }, (err) => { console.log('onErrorCreateFile', err) }
+//       );
+
+//     }, (err) => { console.log('onErrorLoadFs', err) });
+//   }, false);
+
+// }

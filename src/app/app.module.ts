@@ -13,7 +13,7 @@ import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
 import { SMS } from '@awesome-cordova-plugins/sms/ngx';
 import { SQLitePorter } from '@awesome-cordova-plugins/sqlite-porter/ngx';
 import { File } from '@awesome-cordova-plugins/file/ngx';
-import { FileTransfer, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
+// import { FileTransfer, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 @NgModule({
   declarations: [AppComponent],
@@ -24,8 +24,6 @@ import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
     SMS,
     SQLitePorter,
     File,
-    FileTransfer,
-    FileTransferObject,
     FileOpener,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
