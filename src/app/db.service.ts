@@ -17,7 +17,7 @@ export class DbService {
   private sqlStatement: any;
   readonly db_name: string = "student_record.db";
   readonly db_table: string = "studentTable";
-  USERS: Array<any>;
+  USERS: Array<any> = [];
   private fileDataEntry: string = '';
 
   constructor(
@@ -160,11 +160,12 @@ export class DbService {
         // this.downloadFileFromData();       will see later lets try opening the cdvfile://localhost/persistent/  to see the file
         // this.openFile();
       })
-      .catch(e => console.error(e));
+      .catch(e => console.log(e));
   }
 
   importData() {
-
+    //this.getAllUsers();
+    // console.log(this.USERS);
     // var dbShell = window.openDatabase(database_name, database_version, database_displayname, database_size);
     var dbShell = window['openDatabase'](this.db_name, '1', this.db_name, 1000000);
     this.sqlitePorter.importSqlToDb(dbShell, this.sqlStatement)
@@ -172,23 +173,10 @@ export class DbService {
       .catch(e => console.error(e));
   }
 
-  // createFile(data) {      with REQUESTFILESYSTEM
-  //   document.addEventListener("deviceready", function () {
+  createFileLocally() {
+    this.createFile(this.USERS || []);
 
-
-  //     window['requestFileSystem'](window['PERSISTENT'], 10000, function (fs) {
-
-  //       console.log(fs);
-  //       fs.root.getFile("newPersistentFile.txt", { create: true, exclusive: false }, function (fileEntry) {
-
-  //         console.log("fileEntry is file?" + fileEntry.isFile.toString()); console.log(fileEntry.fullPath)
-  //         writeToFile(fileEntry, data);
-  //       }, (err) => { console.log('onErrorCreateFile', err) }
-  //       );
-
-  //     }, (err) => { console.log('onErrorLoadFs', err) });
-  //   }, false);
-  // }
+  }
 
   createFile(data) {
     document.addEventListener("deviceready", function () {
@@ -274,7 +262,7 @@ function createMyFile(dirEntry, data, fileName, isAppend) {
 
 }
 
-// function downloadFileFromData() {
+//  downloadFileFromData() {
 //   const fileTransfer: FileTransferObject = this.transfer.create();
 //   // let path = 'file:///android_asset/www/';
 //   let path = 'cdvfile://localhost/persistent/';
@@ -313,3 +301,22 @@ function createMyFile(dirEntry, data, fileName, isAppend) {
 //   }, false);
 
 // }
+
+
+// createFile(data) {      with REQUESTFILESYSTEM
+  //   document.addEventListener("deviceready", function () {
+
+
+  //     window['requestFileSystem'](window['PERSISTENT'], 10000, function (fs) {
+
+  //       console.log(fs);
+  //       fs.root.getFile("newPersistentFile.txt", { create: true, exclusive: false }, function (fileEntry) {
+
+  //         console.log("fileEntry is file?" + fileEntry.isFile.toString()); console.log(fileEntry.fullPath)
+  //         writeToFile(fileEntry, data);
+  //       }, (err) => { console.log('onErrorCreateFile', err) }
+  //       );
+
+  //     }, (err) => { console.log('onErrorLoadFs', err) });
+  //   }, false);
+  // }

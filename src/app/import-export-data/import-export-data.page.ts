@@ -10,7 +10,10 @@ export class ImportExportDataPage implements OnInit {
 
   constructor(
     private db: DbService
-  ) { }
+  ) {
+
+    this.db.getAllUsers();
+  }
 
   ngOnInit() {
   }
@@ -21,5 +24,9 @@ export class ImportExportDataPage implements OnInit {
 
   openFile() {
     this.db.openFile();
+  }
+
+  createFile() {
+    this.db.createFileLocally();
   }
 }
