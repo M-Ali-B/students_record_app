@@ -7,6 +7,7 @@ import { SQLitePorter } from '@awesome-cordova-plugins/sqlite-porter/ngx';
 import { File } from '@awesome-cordova-plugins/file/ngx';
 // import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
+import { Utility } from './Utility';
 declare let cordova: any;
 @Injectable({
   providedIn: 'root'
@@ -25,10 +26,12 @@ export class DbService {
     private sqlite: SQLite,
     private sqlitePorter: SQLitePorter,
     private file: File,
-
-    private fileOpener: FileOpener
+    private fileOpener: FileOpener,
+    private util: Utility
   ) {
     this.databaseConn();
+    util = new Utility();
+    this.setFileAccess();
   }
 
   // Create SQLite database
@@ -55,6 +58,18 @@ export class DbService {
       })
         .catch((error) => alert(JSON.stringify(error)));
     });
+  }
+
+  setFileAccess() {
+    this.platform.ready().then(() => {
+      if (this.platform.is('desktop')) {
+        console.log('web');
+      }
+      else if (this.platform.is('android')) {
+        console.log('android');
+      }
+
+    })
   }
 
   // Crud
@@ -174,7 +189,7 @@ export class DbService {
   }
 
   createFileLocally() {
-    this.createFile(this.USERS || []);
+    this.createFile(this.util.formatDbData(this.USERS));
 
   }
 

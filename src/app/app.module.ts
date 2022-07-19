@@ -15,6 +15,7 @@ import { SQLitePorter } from '@awesome-cordova-plugins/sqlite-porter/ngx';
 import { File } from '@awesome-cordova-plugins/file/ngx';
 // import { FileTransfer, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
+import { Utility } from './Utility';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -25,6 +26,7 @@ import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
     SQLitePorter,
     File,
     FileOpener,
+    Utility,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent],
