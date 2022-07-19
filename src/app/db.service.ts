@@ -44,7 +44,8 @@ export class DbService {
                     name varchar(255),
                     fname varchar(255),
                     class varchar(255),
-                    phone varchar(255)
+                    phone varchar(255),
+                    isChecked bit NOT NULL DEFAULT 0
                   )`;
     this.platform.ready().then(() => {
       this.sqlite.create({
@@ -136,7 +137,8 @@ export class DbService {
           name: res.rows.item(0).name,
           fname: res.rows.item(0).fname,
           class: res.rows.item(0).class,
-          phone: res.rows.item(0).phone
+          phone: res.rows.item(0).phone,
+          isChecked: res.rows.item(0).isChecked
         }
       });
   }
