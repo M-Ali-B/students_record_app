@@ -8,6 +8,7 @@ import { File } from '@awesome-cordova-plugins/file/ngx';
 // import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 import { Utility } from './Utility';
+import { Chooser } from '@awesome-cordova-plugins/chooser/ngx';
 declare let cordova: any;
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,8 @@ export class DbService {
     private sqlitePorter: SQLitePorter,
     private file: File,
     private fileOpener: FileOpener,
-    private util: Utility
+    private util: Utility,
+    private chooser: Chooser
   ) {
     this.databaseConn();
     util = new Utility();
@@ -208,6 +210,12 @@ export class DbService {
     this.fileOpener.showOpenWithDialog(cordova.file.externalDataDirectory + 'fileToAppend.txt', 'text/plain')
       .then(() => console.log('File is opened'))
       .catch(e => console.log('Error opening file', e));
+  }
+  // needed in future
+  fileChooser() {
+    this.chooser.getFile()
+      .then(file => { console.log(file ? file.name : 'canceled'); alert(file) })
+      .catch((error: any) => console.error(error));
   }
 
 }

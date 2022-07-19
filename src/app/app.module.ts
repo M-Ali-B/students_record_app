@@ -16,6 +16,7 @@ import { File } from '@awesome-cordova-plugins/file/ngx';
 // import { FileTransfer, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 import { Utility } from './Utility';
+import { Chooser } from '@awesome-cordova-plugins/chooser/ngx';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -27,6 +28,7 @@ import { Utility } from './Utility';
     File,
     FileOpener,
     Utility,
+    Chooser,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent],
