@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-searchbar placeholder="Search Name" showCancelButton searchIcon="search" animated cancel-button-icon
+      debounce="1000" (ionChange)="ionChange($event)"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item *ngFor="let user of db.USERS">
+    <ion-label>
+      <h2><strong>{{ user.name }}</strong></h2>
+      <p>{{ user.fname }}</p>
+      <p>{{ user.class }}</p>
+      <p>{{user.phone}}</p>
+      <p>{{user.isChecked}}</p>
+    </ion-label>
+    <ion-label *ngIf="!db.USERS"></ion-label>
+  </ion-item>
+</ion-content>

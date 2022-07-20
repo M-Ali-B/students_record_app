@@ -220,6 +220,24 @@ export class DbService {
       .catch((error: any) => console.error(error));
   }
 
+  getUserByName(name) {
+    return this.dbInstance.executeSql(`SELECT * FROM ${this.db_table} WHERE name = ?`, [name])
+      .then((res) => {
+        this.USERS = [];
+        if (res.rows.length > 0) {
+          for (var i = 0; i < res.rows.length; i++) {
+            this.USERS.push(res.rows.item(i));
+          }
+          console.log(this.USERS);
+          return this.USERS;
+        }
+      }, (e) => {
+        console.log(e);
+        alert(JSON.stringify(e));
+      });
+
+  }
+
 }
 function writeToFile(fileEntry, dataObj, file_name, isAppend) {
   console.log(fileEntry);
