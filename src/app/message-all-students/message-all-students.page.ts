@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { DbService } from '../db.service';
 
 @Component({
@@ -8,22 +9,34 @@ import { DbService } from '../db.service';
 })
 export class MessageAllStudentsPage implements OnInit {
 
-  constructor(private db: DbService) { }
+  constructor(private db: DbService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
+    this.db.databaseConn();
   }
 
   ionViewDidEnter() {
     this.db.getAllUsers();
   }
 
+  ionViewDidLeave() {
+    // this.db.resetUserNumbers();
+  }
+
   ionChange(event) {
-    console.log(event.detail.value)
     if (event.detail.value != '') {
       this.db.getUserByName(event.detail.value);
     }
     else {
       this.db.getAllUsers();
     }
+  }
+
+  onSendContacts() {
+    this.db.getUserNumbersWithIsChecked();
+    console.log(this.db.cellNumbers);
+    // this.router.navigate(['/send-message-all-students']);
   }
 }

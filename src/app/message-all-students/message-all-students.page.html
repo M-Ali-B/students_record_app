@@ -6,14 +6,23 @@
 </ion-header>
 
 <ion-content>
-  <ion-item *ngFor="let user of db.USERS">
-    <ion-label>
-      <h2><strong>{{ user.name }}</strong></h2>
-      <p>{{ user.fname }}</p>
-      <p>{{ user.class }}</p>
-      <p>{{user.phone}}</p>
-      <p>{{user.isChecked}}</p>
-    </ion-label>
-    <ion-label *ngIf="!db.USERS"></ion-label>
-  </ion-item>
+  <ion-list>
+    <ion-item *ngFor="let user of db.USERS">
+      <ion-label>
+        <h2><strong>{{ user.name }}</strong></h2>
+        <p>{{ user.fname }}</p>
+        <p>{{ user.class }}</p>
+        <p>{{user.phone}}</p>
+        <p>{{user.isChecked}}</p>
+      </ion-label>
+      <ion-checkbox slot="end" [(ngModel)]="user.isChecked"></ion-checkbox>
+    </ion-item>
+  </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button *ngIf="db.isChecked()" (click)="onSendContacts()">
+      <ion-icon name="checkmark"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
 </ion-content>

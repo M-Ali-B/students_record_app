@@ -21,6 +21,7 @@ export class DbService {
   readonly db_table: string = "studentTable";
   USERS: Array<any> = [];
   private fileDataEntry: string = '';
+  cellNumbers: Array<any> = [];
 
   constructor(
     private platform: Platform,
@@ -237,7 +238,27 @@ export class DbService {
       });
 
   }
+  isChecked(): boolean {
 
+    if (this.USERS.length != 0) {
+      let isCheckedFlag = (el) => el.isChecked;
+      return this.USERS.some(isCheckedFlag);
+    }
+  }
+
+  getUserNumbersWithIsChecked() {
+
+    this.USERS.forEach((el, index) => {
+      if (el.isChecked) {
+        this.cellNumbers.push(this.USERS[index]['phone']);
+      }
+    });
+    this.cellNumbers = [... new Set(this.cellNumbers)];
+  }
+
+  resetUserNumbers() {
+    this.cellNumbers = [];
+  }
 }
 function writeToFile(fileEntry, dataObj, file_name, isAppend) {
   console.log(fileEntry);
