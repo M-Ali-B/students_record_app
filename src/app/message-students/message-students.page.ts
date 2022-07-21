@@ -14,7 +14,10 @@ export class MessageStudentsPage implements OnInit {
   }
 
   sendSMS() {
-    this.sms.send(this.reciever, this.message);
+    this.sms.send(this.reciever, this.message)
+      .then(() => {
+        alert('message sent')
+      }, (e) => alert(JSON.stringify(e)));
   }
 
 }

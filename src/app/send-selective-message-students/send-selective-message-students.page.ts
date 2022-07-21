@@ -22,6 +22,13 @@ export class SendSelectiveMessageStudentsPage implements OnInit {
 
   sendSMS() {
     console.log(this.studentsNumbers);
-    this.sms.send(this.studentsNumbers, this.message);
+    this.studentsNumbers.forEach(
+      (cell) => {
+        this.sms.send(cell, this.message)
+          .then(() => {
+            // alert('message sent')
+          }, (e) => alert(JSON.stringify(e)));
+      }
+    );
   }
 }
