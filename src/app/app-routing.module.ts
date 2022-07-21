@@ -42,7 +42,11 @@ const routes: Routes = [
   {
     path: 'message-all-students',
     loadChildren: () => import('./message-all-students/message-all-students.module').then( m => m.MessageAllStudentsPageModule)
+  },  {
+    path: 'send-selective-message-students',
+    loadChildren: () => import('./send-selective-message-students/send-selective-message-students.module').then( m => m.SendSelectiveMessageStudentsPageModule)
   },
+
 ];
 
 @NgModule({

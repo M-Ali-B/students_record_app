@@ -37,6 +37,6 @@ export class MessageAllStudentsPage implements OnInit {
   onSendContacts() {
     this.db.getUserNumbersWithIsChecked();
     console.log(this.db.cellNumbers);
-    // this.router.navigate(['/send-message-all-students']);
+    this.router.navigate(['/send-selective-message-students']);
   }
 }
