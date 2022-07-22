@@ -7,7 +7,7 @@
 <ion-content>
   <ion-list>
     <ion-item>
-      <ion-select placeholder="Select Class " (ionChange)="handleChange($event)">
+      <ion-select placeholder="Select Class " (ionChange)="handleChange($event)" multiple="true">
         <ion-item *ngFor="let d of data">
           <ion-select-option value="{{d}}">{{d}}</ion-select-option>
         </ion-item>

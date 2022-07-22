@@ -24,7 +24,7 @@ export class ClasswiseMessagePage implements OnInit {
 
   handleChange($event) {
     console.log($event.detail.value);
-    this.db.getAllUsersByClass($event.detail.value);
+    this.db.getAllUsersByMultipleClasses($event.detail.value);
 
   }
 
@@ -43,7 +43,7 @@ export class ClasswiseMessagePage implements OnInit {
           });
       }
     );
-
+    alert(successCount);
     if (successCount > 0) {
       alert('message send ' + ' ' + successCount + ' users')
     }

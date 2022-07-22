@@ -129,6 +129,25 @@ export class DbService {
 
   }
 
+  getAllUsersByMultipleClasses(classNumber: Array<any>) {
+    this.reset(); console.log(classNumber)
+    classNumber.forEach((el, index) => {
+      console.log(el);
+      return this.dbInstance.executeSql(`SELECT * FROM ${this.db_table} WHERE class = ?`, [el])
+        .then((res) => {
+          if (res.rows.length > 0) {
+            for (var i = 0; i < res.rows.length; i++) {
+              this.USERS.push(res.rows.item(i));
+            }
+          }
+        }, (e) => {
+          console.log(e);
+          alert(JSON.stringify(e));
+        });
+    });
+    console.log(this.USERS);
+    return this.USERS;
+  }
   // Get user
   getUser(id): Promise<any> {
     return this.dbInstance.executeSql(`SELECT * FROM ${this.db_table} WHERE user_id = ?`, [id])
