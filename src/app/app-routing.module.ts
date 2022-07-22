@@ -46,6 +46,10 @@ const routes: Routes = [
     path: 'send-selective-message-students',
     loadChildren: () => import('./send-selective-message-students/send-selective-message-students.module').then( m => m.SendSelectiveMessageStudentsPageModule)
   },
+  {
+    path: 'classwise-message',
+    loadChildren: () => import('./classwise-message/classwise-message.module').then( m => m.ClasswiseMessagePageModule)
+  },
 
 ];
 
