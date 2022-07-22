@@ -14,12 +14,14 @@ export class StudentEditPage implements OnInit {
   fName: string = "";
   classNumber: string = "";
   phone: string = "";
+  url = '';
 
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private db: DbService
   ) {
+    this.url = this.router.getCurrentNavigation().previousNavigation.finalUrl.toString();
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
 
     this.db.getUser(this.id).then((res) => {
@@ -35,7 +37,12 @@ export class StudentEditPage implements OnInit {
 
   onUpdate() {
     this.db.updateUser(this.id, this.studName, this.fName, this.classNumber, this.phone).then(() => {
-      this.router.navigate(['/student-create']);
+      if (this.url == '/student-create') {
+        this.router.navigate(['/student-create']);
+      }
+      else if (this.url == '/student-search') {
+        this.router.navigate(['/student-search']);
+      }
     })
   }
 

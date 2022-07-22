@@ -11,7 +11,16 @@
 
   <ion-input [(ngModel)]="studName" placeholder="Name"></ion-input>
   <ion-input [(ngModel)]="fName" placeholder="Father Name"></ion-input>
-  <ion-input [(ngModel)]="classNumber" placeholder="Class"></ion-input>
+  <ion-list>
+    <ion-item>
+      <ion-select placeholder="Select Class " (ionChange)="handleChange($event)">
+        <ion-item *ngFor="let d of data">
+          <ion-select-option value="{{d}}">{{d}}</ion-select-option>
+        </ion-item>
+
+      </ion-select>
+    </ion-item>
+  </ion-list>
   <ion-input [(ngModel)]="phone" placeholder="Phone"></ion-input>
 
   <ion-button color="success" expand="block" (click)="createUser()">
@@ -24,7 +33,6 @@
       <p>{{ user.fname }}</p>
       <p>{{ user.class }}</p>
       <p>{{user.phone}}</p>
-      <p>{{user.isChecked}}</p>
     </ion-label>
 
     <div class="item-note" item-end>

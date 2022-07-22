@@ -7,7 +7,7 @@ import { DbService } from '../db.service';
   styleUrls: ['./student-create.page.scss'],
 })
 export class StudentCreatePage implements OnInit {
-
+  data = [5, 6, 7, 8, 9, 10];
   studName: string = "";
   fName: string = "";
   classNumber: string = "";
@@ -23,6 +23,10 @@ export class StudentCreatePage implements OnInit {
 
   ionViewDidEnter() {
     this.db.getAllUsers();
+  }
+
+  handleChange($event) {
+    this.classNumber = $event.detail.value;
   }
 
   createUser() {
