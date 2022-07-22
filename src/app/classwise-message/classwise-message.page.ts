@@ -43,7 +43,6 @@ export class ClasswiseMessagePage implements OnInit {
           });
       }
     );
-    alert(successCount);
     if (successCount > 0) {
       alert('message send ' + ' ' + successCount + ' users')
     }
