@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { SMS } from '@awesome-cordova-plugins/sms/ngx';
+import { DbService } from '../db.service';
 
 @Component({
   selector: 'app-classwise-message',
@@ -7,9 +9,46 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ClasswiseMessagePage implements OnInit {
 
-  constructor() { }
+  data = [5, 6, 7, 8, 9, 10];
+  message = '';
+  constructor(
+    private db: DbService,
+    private sms: SMS
+  ) {
+    this.db.databaseConn();
+    this.db.reset();
+  }
 
   ngOnInit() {
   }
 
+  handleChange($event) {
+    console.log($event.detail.value);
+    this.db.getAllUsersByClass($event.detail.value);
+
+  }
+
+  sendSMS() {
+    let successCount = 0;
+    let failureCount = 0;
+    this.db.USERS.forEach(
+      (user) => {
+        this.sms.send(user.phone, this.message)
+          .then((info) => {
+            successCount++;
+            //alert('message sent' + '=> ' + info)
+          }, (e) => {
+            failureCount++;
+            //  alert(JSON.stringify(e))
+          });
+      }
+    );
+
+    if (successCount > 0) {
+      alert('message send ' + ' ' + successCount + ' users')
+    }
+    if (failureCount > 0) {
+      alert('sending failed to ' + ' ' + successCount + ' users')
+    }
+  }
 }

@@ -5,5 +5,22 @@
 </ion-header>
 
 <ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-select placeholder="Select Class " (ionChange)="handleChange($event)">
+        <ion-item *ngFor="let d of data">
+          <ion-select-option value="{{d}}">{{d}}</ion-select-option>
+        </ion-item>
 
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <ion-item>
+    <ion-textarea [(ngModel)]="message" placeholder="enter message"></ion-textarea>
+  </ion-item>
+
+  <ion-item>
+    <ion-button expand="block" (click)="sendSMS()">Send</ion-button>
+  </ion-item>
 </ion-content>
