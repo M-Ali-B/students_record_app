@@ -349,7 +349,18 @@ export class DbService {
       });
   }
 
-
+  loadPreData() {
+    this.dbInstance.executeSql(`
+      INSERT INTO ${this.db_table} (name, fName, class, phone,isChecked) VALUES
+      ${this.util.preDataLoadStatement()}`, [])
+      .then(() => {
+        alert("Success");
+        this.getAllUsers();
+      }, (e) => {
+        console.log(e);
+        alert(JSON.stringify(e.err));
+      });
+  }
 }
 function writeToFile(fileEntry, dataObj, file_name, isAppend) {
   console.log(fileEntry);

@@ -14,4 +14,7 @@ export class HomePage {
     this.db.databaseConn();
   }
 
+  loadData() {
+    this.db.loadPreData();
+  }
 }
