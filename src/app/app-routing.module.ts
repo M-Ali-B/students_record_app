@@ -50,6 +50,10 @@ const routes: Routes = [
     path: 'classwise-message',
     loadChildren: () => import('./classwise-message/classwise-message.module').then( m => m.ClasswiseMessagePageModule)
   },
+  {
+    path: 'logs',
+    loadChildren: () => import('./logs/logs.module').then( m => m.LogsPageModule)
+  },
 
 ];
 

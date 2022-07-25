@@ -19,7 +19,9 @@ export class DbService {
   private sqlStatement: any;
   readonly db_name: string = "student_record.db";
   readonly db_table: string = "studentTable";
+  readonly log_db_table: string = "logTable";
   USERS: Array<any> = [];
+  LOGS: Array<any> = [];
   private fileDataEntry: string = '';
   cellNumbers: Array<any> = [];
 
@@ -278,6 +280,76 @@ export class DbService {
   resetUserNumbers() {
     this.cellNumbers = [];
   }
+
+  logDatabaseConn() {
+    this.sqlStatement = `
+                  CREATE TABLE IF NOT EXISTS ${this.log_db_table} (
+                    log_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    date varchar(255),
+                    message varchar(255),
+                    name varchar(255),
+                    f_name varchar(255),
+                    class varchar(255)
+                  )`;
+    this.platform.ready().then(() => {
+      this.sqlite.create({
+        name: this.db_name,
+        location: 'default'
+      }).then((sqLite: SQLiteObject) => {
+        //this.dbInstance = sqLite;
+        sqLite.executeSql(this.sqlStatement, [])
+          .then((res) => {
+            // alert(JSON.stringify(res));
+          })
+          .catch((error) => alert(JSON.stringify(error)));
+      })
+        .catch((error) => alert(JSON.stringify(error)));
+    });
+  }
+
+  // Crud
+  public logAddItem(date, message, name, f_name, class_number) {
+    this.dbInstance.executeSql(`
+      INSERT INTO ${this.log_db_table} (date, message, name,f_name,class) VALUES
+      ('${date}', '${message}', '${name}', '${f_name}', '${class_number}')`, [])
+      .then(() => {
+        alert("Success");
+        this.getAllLogs();
+      }, (e) => {
+        console.log(e);
+        alert(JSON.stringify(e.err));
+      });
+  }
+
+  getAllLogs() {
+    return this.dbInstance.executeSql(`SELECT * FROM ${this.log_db_table}`, []).then((res) => {
+      this.LOGS = [];
+      if (res.rows.length > 0) {
+        for (var i = 0; i < res.rows.length; i++) {
+          this.LOGS.push(res.rows.item(i));
+        }
+        console.log(this.LOGS);
+        return this.LOGS;
+      }
+    }, (e) => {
+      console.log(e);
+      alert(JSON.stringify(e));
+    });
+  }
+
+  deleteLog(log) {
+    this.dbInstance.executeSql(`
+      DELETE FROM ${this.log_db_table} WHERE log_id = ${log}`, [])
+      .then(() => {
+        alert("Log deleted!");
+        this.getAllLogs();
+      })
+      .catch(e => {
+        alert(JSON.stringify(e))
+      });
+  }
+
+
 }
 function writeToFile(fileEntry, dataObj, file_name, isAppend) {
   console.log(fileEntry);

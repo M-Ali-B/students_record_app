@@ -11,12 +11,14 @@ export class ClasswiseMessagePage implements OnInit {
 
   data = [5, 6, 7, 8, 9, 10];
   message = '';
+  today = new Date().toString();
   constructor(
     private db: DbService,
     private sms: SMS
   ) {
     this.db.databaseConn();
     this.db.reset();
+    this.db.logDatabaseConn();
   }
 
   ngOnInit() {
@@ -36,6 +38,7 @@ export class ClasswiseMessagePage implements OnInit {
         this.sms.send(user.phone, this.message)
           .then((info) => {
             successCount++;
+            this.addLogs(this.message, user);
             //alert('message sent' + '=> ' + info)
           }, (e) => {
             failureCount++;
@@ -49,5 +52,9 @@ export class ClasswiseMessagePage implements OnInit {
     if (failureCount > 0) {
       alert('sending failed to ' + ' ' + successCount + ' users')
     }
+  }
+
+  addLogs(message, user) {
+    this.db.logAddItem(this.today, message, user.name, user.fname, user.class);
   }
 }
