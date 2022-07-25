@@ -15,7 +15,6 @@ export class StudentCreatePage implements OnInit {
   constructor(
     private db: DbService
   ) {
-    this.db.databaseConn();
   }
 
   ngOnInit() {

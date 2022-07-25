@@ -8,13 +8,12 @@ import { DbService } from '../db.service';
   styleUrls: ['./message-all-students.page.scss'],
 })
 export class MessageAllStudentsPage implements OnInit {
-
-  constructor(private db: DbService,
+  constructor(
+    private db: DbService,
     private router: Router
   ) { }
 
   ngOnInit() {
-    this.db.databaseConn();
   }
 
   ionViewDidEnter() {
@@ -35,8 +34,8 @@ export class MessageAllStudentsPage implements OnInit {
   }
 
   onSendContacts() {
-    this.db.getUserNumbersWithIsChecked();
-    console.log(this.db.cellNumbers);
+    this.db.getUsersWithIsChecked();
+    console.log(this.db.selectedUsers);
     this.router.navigate(['/send-selective-message-students']);
   }
 }

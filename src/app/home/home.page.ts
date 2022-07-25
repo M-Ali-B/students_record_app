@@ -12,6 +12,7 @@ export class HomePage {
     private db: DbService
   ) {
     this.db.databaseConn();
+    this.db.logDatabaseConn();
   }
 
   loadData() {

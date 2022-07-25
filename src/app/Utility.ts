@@ -610,9 +610,7 @@ export class Utility {
 
 
 
-          (
-            '"Abdur rahim', 'Abdur rehman', 0, 0, 7
-          ),
+
 
 
 
@@ -959,7 +957,7 @@ export class Utility {
 
 
           (
-            '"Abdul majid', 'Abdulbasit"', 0, '10', 03339364536
+            'Abdul majid', 'Abdulbasit', '10', 03339364536 , 0
           ),
 
 

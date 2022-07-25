@@ -11,7 +11,6 @@ export class StudentSearchPage implements OnInit {
   constructor(
     private db: DbService
   ) {
-    this.db.databaseConn();
     this.db.reset();
   }
 

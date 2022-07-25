@@ -24,6 +24,7 @@ export class DbService {
   LOGS: Array<any> = [];
   private fileDataEntry: string = '';
   cellNumbers: Array<any> = [];
+  selectedUsers: Array<any> = [];
 
   constructor(
     private platform: Platform,
@@ -275,6 +276,16 @@ export class DbService {
       }
     });
     this.cellNumbers = [... new Set(this.cellNumbers)];
+  }
+
+  getUsersWithIsChecked() {
+
+    this.USERS.forEach((el, index) => {
+      if (el.isChecked) {
+        this.selectedUsers.push(this.USERS[index]);
+      }
+    });
+    this.selectedUsers = [... new Set(this.selectedUsers)];
   }
 
   resetUserNumbers() {

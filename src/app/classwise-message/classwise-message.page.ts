@@ -16,9 +16,7 @@ export class ClasswiseMessagePage implements OnInit {
     private db: DbService,
     private sms: SMS
   ) {
-    this.db.databaseConn();
     this.db.reset();
-    this.db.logDatabaseConn();
   }
 
   ngOnInit() {
