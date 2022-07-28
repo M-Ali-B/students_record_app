@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SMS } from '@awesome-cordova-plugins/sms/ngx';
 import { DbService } from '../db.service';
-
+import * as myGlobal from '../global';
 @Component({
   selector: 'app-classwise-message',
   templateUrl: './classwise-message.page.html',
@@ -9,7 +9,7 @@ import { DbService } from '../db.service';
 })
 export class ClasswiseMessagePage implements OnInit {
 
-  data = [5, 6, 7, 8, 9, 10];
+  data = myGlobal.classData;
   message = '';
   today = new Date().toString();
   constructor(

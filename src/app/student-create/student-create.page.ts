@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { DbService } from '../db.service';
-
+import * as myGlobal from '../global';
 @Component({
   selector: 'app-student-create',
   templateUrl: './student-create.page.html',
   styleUrls: ['./student-create.page.scss'],
 })
 export class StudentCreatePage implements OnInit {
-  data = [5, 6, 7, 8, 9, 10];
+  data = myGlobal.classData;
   studName: string = "";
   fName: string = "";
   classNumber: string = "";
