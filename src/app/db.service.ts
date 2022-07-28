@@ -172,6 +172,11 @@ export class DbService {
     return this.dbInstance.executeSql(`UPDATE ${this.db_table} SET name = ?, fname = ? , class = ?, phone = ? WHERE user_id = ${id}`, data)
   }
 
+  massUpdateUsers(fromClass, toClass) {
+    console.log(fromClass + ' ' + toClass);
+    return this.dbInstance.executeSql(`UPDATE ${this.db_table} SET class= ${toClass} WHERE class = ${fromClass}`, []);
+  }
+
   // Delete
   deleteUser(user) {
     this.dbInstance.executeSql(`

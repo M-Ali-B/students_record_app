@@ -58,6 +58,10 @@ const routes: Routes = [
     path: 'call-students',
     loadChildren: () => import('./call-students/call-students.module').then( m => m.CallStudentsPageModule)
   },
+  {
+    path: 'mass-operation-records',
+    loadChildren: () => import('./mass-operation-records/mass-operation-records.module').then( m => m.MassOperationRecordsPageModule)
+  },
 
 ];
 
