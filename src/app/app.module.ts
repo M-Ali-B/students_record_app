@@ -17,6 +17,7 @@ import { File } from '@awesome-cordova-plugins/file/ngx';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 import { Utility } from './Utility';
 import { Chooser } from '@awesome-cordova-plugins/chooser/ngx';
+import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -29,6 +30,7 @@ import { Chooser } from '@awesome-cordova-plugins/chooser/ngx';
     FileOpener,
     Utility,
     Chooser,
+    CallNumber,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent],
