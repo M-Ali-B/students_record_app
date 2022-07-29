@@ -12,6 +12,8 @@ export class SendSelectiveMessageStudentsPage implements OnInit {
   selectedUsers: Array<any>;
   message: string = "";
   today = new Date().toString();
+  successCount: Array<any> = [];
+  failureCount: Array<any> = [];
   constructor(
     private sms: SMS,
     private db: DbService,
@@ -24,15 +26,36 @@ export class SendSelectiveMessageStudentsPage implements OnInit {
   }
 
   sendSMS() {
+    var counter = 0;
     console.log(this.selectedUsers);
     this.selectedUsers.forEach(
       (user) => {
         this.db.logAddItem(this.today, this.message, user.name, user.fname, user.class)
         this.sms.send(user.phone, this.message)
           .then(() => {
-            // alert('message sent')
-          }, (e) => alert(JSON.stringify(e)));
+            counter++;
+            this.successCount.push(user);
+            if (counter == this.selectedUsers.length) {
+              this.checkSuccessMessages();
+            }
+          }, (e) => {
+            counter++;
+            this.failureCount.push(user);
+            if (counter == this.selectedUsers.length) {
+              this.checkFailMessages();
+            }
+
+          });
       }
     );
+    this.db.resetSelectedUsers();
+  }
+
+  checkSuccessMessages() {
+    alert('Message send to' + ' ' + this.successCount.length + ' users')
+  }
+  checkFailMessages() {
+    alert('sending failed to ' + ' ' + this.failureCount.length + ' users')
   }
 }
+

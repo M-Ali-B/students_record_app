@@ -301,6 +301,10 @@ export class DbService {
     this.cellNumbers = [];
   }
 
+  resetSelectedUsers() {
+    this.selectedUsers = [];
+  }
+
   logDatabaseConn() {
     this.sqlStatement = `
                   CREATE TABLE IF NOT EXISTS ${this.log_db_table} (
@@ -333,7 +337,6 @@ export class DbService {
       INSERT INTO ${this.log_db_table} (date, message, name,f_name,class) VALUES
       ('${date}', '${message}', '${name}', '${f_name}', '${class_number}')`, [])
       .then(() => {
-        alert("Success");
         this.getAllLogs();
       }, (e) => {
         console.log(e);

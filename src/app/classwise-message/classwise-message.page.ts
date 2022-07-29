@@ -12,6 +12,8 @@ export class ClasswiseMessagePage implements OnInit {
   data = myGlobal.classData;
   message = '';
   today = new Date().toString();
+  successCount: Array<any> = [];
+  failureCount: Array<any> = [];
   constructor(
     private db: DbService,
     private sms: SMS
@@ -29,30 +31,39 @@ export class ClasswiseMessagePage implements OnInit {
   }
 
   sendSMS() {
-    let successCount = 0;
-    let failureCount = 0;
+    console.log(this.db.USERS);
+    var counter = 0;
     this.db.USERS.forEach(
       (user) => {
         this.sms.send(user.phone, this.message)
           .then((info) => {
-            successCount++;
+            counter++;
+            this.successCount.push(user);
+            if (counter == this.db.USERS.length) {
+              this.checkSuccessMessages();
+            }
             this.addLogs(this.message, user);
             //alert('message sent' + '=> ' + info)
           }, (e) => {
-            failureCount++;
+            counter++;
+            this.failureCount.push(user);
+            if (counter == this.db.USERS.length) {
+              this.checkFailMessages();
+            }
             //  alert(JSON.stringify(e))
           });
       }
     );
-    if (successCount > 0) {
-      alert('message send ' + ' ' + successCount + ' users')
-    }
-    if (failureCount > 0) {
-      alert('sending failed to ' + ' ' + successCount + ' users')
-    }
   }
 
   addLogs(message, user) {
     this.db.logAddItem(this.today, message, user.name, user.fname, user.class);
+  }
+
+  checkSuccessMessages() {
+    alert('Message send to' + ' ' + this.successCount.length + ' users')
+  }
+  checkFailMessages() {
+    alert('sending failed to ' + ' ' + this.failureCount.length + ' users')
   }
 }
