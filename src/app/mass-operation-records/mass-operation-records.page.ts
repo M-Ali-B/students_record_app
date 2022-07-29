@@ -10,6 +10,7 @@ export class MassOperationRecordsPage implements OnInit {
   data = myGlobal.classData;
   fromClassNumber: string = "";
   toClassNumber: string = "";
+  deleteClassNumber: string = "";
   constructor(private db: DbService) { }
 
   ngOnInit() {
@@ -25,6 +26,16 @@ export class MassOperationRecordsPage implements OnInit {
 
   changeClass() {
     this.db.massUpdateUsers(this.fromClassNumber, this.toClassNumber)
+      .then(() => alert('Success'))
+      .catch((err) => alert('Failed' + err))
+  }
+
+  handleChangefor($event) {
+    this.deleteClassNumber = $event.detail.value;
+  }
+
+  deleteClass() {
+    this.db.massDelete(this.deleteClassNumber)
       .then(() => alert('Success'))
       .catch((err) => alert('Failed' + err))
   }

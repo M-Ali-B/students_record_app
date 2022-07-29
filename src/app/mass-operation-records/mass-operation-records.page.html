@@ -31,4 +31,22 @@
       Change Class
     </ion-button>
   </ion-item>
+
+  <ion-list>
+    <ion-item>
+      <ion-select placeholder="Select Class from " (ionChange)="handleChangefor($event)">
+        <ion-item *ngFor="let d of data">
+          <ion-select-option value="{{d}}">{{d}}</ion-select-option>
+        </ion-item>
+
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+
+  <ion-item>
+    <ion-button color="success" expand="block" (click)="deleteClass()">
+      Delete Class
+    </ion-button>
+  </ion-item>
 </ion-content>

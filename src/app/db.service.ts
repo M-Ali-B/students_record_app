@@ -190,6 +190,10 @@ export class DbService {
       });
   }
 
+  massDelete(classNumber) {
+    return this.dbInstance.executeSql(`DELETE FROM ${this.db_table} WHERE class = ${classNumber}`, []);
+  }
+
   reset() {
     this.USERS = [];
   }
