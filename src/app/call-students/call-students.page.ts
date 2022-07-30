@@ -13,6 +13,7 @@ export class CallStudentsPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.db.databaseConn();
   }
 
   ionViewDidEnter() {

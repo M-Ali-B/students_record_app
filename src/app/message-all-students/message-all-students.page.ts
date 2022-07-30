@@ -14,6 +14,7 @@ export class MessageAllStudentsPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.db.databaseConn();
   }
 
   ionViewDidEnter() {
